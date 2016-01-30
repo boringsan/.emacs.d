@@ -1,7 +1,7 @@
 #+TITLE: Emacs settings
 #+AUTHOR: Erik Šabič
 
-* Package
+* Package.el
 
 ** Archives
 
@@ -48,8 +48,9 @@
 ** TODO modify PATH to include the goimports tool
 
 
-* Magit
-#+BEGIN_SRC elisp
+* Magit http://magit.vc/
+
+#+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/site-lisp/magit/lisp")
 (require 'magit)
 
@@ -57,8 +58,6 @@
   (info-initialize)
   (add-to-list 'Info-directory-list
 	       "~/.emacs.d/site-lisp/magit/Documentation/"))
-
-(global-set-key (kbd "C-x g") 'magit-status)
 
 #+END_SRC
 
@@ -84,18 +83,24 @@
             (eshell-cmpl-initialize)
             (define-key eshell-mode-map [remap pcomplete] 'helm-esh-pcomplete)))
 
-(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-(global-set-key (kbd "M-x") 'helm-M-x)
-
 #+END_SRC
 
 
-* Keybindings
+* Global keybindings
 
   Named keys have to be surrounded with angle brackets.
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "`") 'other-window)
-  (global-set-key (kbd "C-<f4>") 'kill-buffer)
+;; magit
+(global-set-key (kbd "C-x g") 'magit-status)
+
+;; helm
+(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+(global-set-key (kbd "M-x") 'helm-M-x)
+
+(global-set-key (kbd "`") 'other-window)
+(global-set-key (kbd "C-<f4>") 'kill-buffer)
 
 #+END_SRC
+
+
