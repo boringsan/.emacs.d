@@ -18,7 +18,7 @@
   (setq package-list '(beacon company flymake-easy flymake-go
           geiser go-errcheck go-rename go-mode golden-ratio golint
           helm async html5-schema hydra js2-mode latex-preview-pane
-          main-line org-beautify-theme rainbow-delimiters
+          main-line org-beautify-theme rainbow-delimiters magit
           rainbow-identifiers sudo-ext with-editor zlc))
 #+END_SRC
 
@@ -92,8 +92,10 @@
 
 * Keybindings
 
+  Named keys have to be surrounded with angle brackets.
+
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "`") 'other-window)
-  (global-set-key (kbd "C-f4") 'kill-buffer)
+  (global-set-key (kbd "C-<f4>") 'kill-buffer)
 
 #+END_SRC
