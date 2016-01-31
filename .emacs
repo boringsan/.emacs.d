@@ -9,13 +9,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(beacon-blink-delay 0)
  '(beacon-color 0.1)
  '(beacon-mode t)
  '(beacon-size 80)
  '(blink-cursor-mode nil)
  '(column-number-mode t)
- '(custom-enabled-themes (quote (leuven)))
+ '(custom-enabled-themes (quote (cyberpunk)))
+ '(custom-safe-themes
+   (quote
+	("3ac266781ee0ac3aa74a6913a1506924cad669f111564507249f0ffa7c5e4b53" "71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" default)))
  '(display-battery-mode t)
  '(display-time-default-load-average nil)
  '(display-time-mode t)
@@ -25,10 +30,16 @@
 	("/home/boring/c++/gnubrow/include" "/home/boring/c++/gnubrow/src" "/home/boring/c++/gnubrow")))
  '(eshell-visual-commands
    (quote
-	("htop" "dmesg" "systemctl" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm" "alsamixer")))
+	("htop" "dmesg" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm" "alsamixer")))
+ '(eshell-visual-options (quote (("systemctl" "--help"))))
+ '(eshell-visual-subcommands
+   (quote
+	(("systemctl" "list-units" "list-sockets" "list-timers" "list-dependencies" "list-unit-files")
+	 ("sudo" "wifi-menu"))))
  '(fringe-mode 4 nil (fringe))
  '(geiser-default-implementation (quote guile))
  '(geiser-mode-start-repl-p t)
+ '(gofmt-command "goimports")
  '(golden-ratio-mode t)
  '(helm-autoresize-mode t)
  '(helm-command-prefix-key "C-c h")
@@ -59,7 +70,7 @@
  '(menu-bar-mode nil)
  '(next-line-add-newlines t)
  '(next-screen-context-lines 4)
- '(org-babel-load-languages (quote ((scheme . t) (emacs-lisp . t))))
+ '(org-babel-load-languages (quote ((scheme . t) (emacs-lisp . t) (sh . t))))
  '(org-confirm-babel-evaluate nil nil nil "Change to a function that has a third option which disables confirmation for the buffer for the session.")
  '(org-insert-mode-line-in-empty-file t)
  '(org-pretty-entities t)
