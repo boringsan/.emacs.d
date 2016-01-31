@@ -17,9 +17,9 @@
 #+BEGIN_SRC emacs-lisp
   (setq package-list '(beacon company flymake-easy flymake-go
           geiser go-errcheck go-rename go-mode golden-ratio golint
-          helm async html5-schema hydra js2-mode latex-preview-pane
-          main-line org-beautify-theme rainbow-delimiters magit
-          rainbow-identifiers sudo-ext with-editor zlc))
+          helm async hydra js2-mode latex-preview-pane main-line
+          org-beautify-theme magit leuven-theme cyberpunk-theme
+          sudo-ext with-editor zlc))
 #+END_SRC
 
 ** Automatic installation
@@ -40,12 +40,38 @@
 #+END_SRC
 
 
-* TODO Golang
+* Golang
 
-** TODO set gopath
-   - then use (setq gofmt-command "goimports")
+  https://github.com/dominikh/go-mode.el
 
-** TODO modify PATH to include the goimports tool
+#+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'gofmt-before-save)
+#+END_SRC
+
+** Goimports
+
+  Install goimports and replace gofmt.
+
+#+BEGIN_SRC sh :tangle no
+go get golang.org/x/tools/cmd/goimports
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(setq gofmt-command "goimports")
+#+END_SRC
+
+
+** Completion
+
+   Requires gocode:
+
+#+BEGIN_SRC sh :tangle no
+go get github.com/nsf/gocode
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(require 'go-complete)
+(add-hook 'completion-at-point-functions 'go-complete-at-point)
+#+END_SRC
 
 
 * Magit http://magit.vc/
@@ -102,5 +128,16 @@
 (global-set-key (kbd "C-<f4>") 'kill-buffer)
 
 #+END_SRC
+
+
+
+
+
+
+
+
+
+
+
 
 
