@@ -45,16 +45,20 @@ therefore that's the required Emacs version of this config.
 
   Named keys have to be surrounded with angle brackets.
 
-#+BEGIN_SRC emacs-lisp
-  ;; magit
-  (global-set-key (kbd "C-x g") 'magit-status)
+#+TBLNAME: keybindings
+  | key     | function            |
+  |---------+---------------------|
+  | C-h SPC | helm-all-mark-rings |
+  | M-x     | helm-M-x            |
+  | C-<f4>  | kill-buffer         |
+  | C-x g   | magit-status        |
+  | `       | other-window        |
 
-  ;; helm
-  (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-  (global-set-key (kbd "M-x") 'helm-M-x)
-
-  (global-set-key (kbd "`") 'other-window)
-  (global-set-key (kbd "C-<f4>") 'kill-buffer)
+#+BEGIN_SRC emacs-lisp :var data=keybindings[2:-1,] :results silent
+  (mapc (lambda (row)
+          (global-set-key (kbd (car row))
+                          (intern (car (cdr row)))))
+        data)
 #+END_SRC
 
 ** Variables
