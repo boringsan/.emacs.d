@@ -1,35 +1,37 @@
 #+TITLE: Emacs settings
 #+AUTHOR: Erik Šabič
 
-* Package.el
+Some settings apply to Emacs versions greater than 24 only, so
+therefore that's the required Emacs version of this config.
 
-** Archives
+* General
+** Package.el
+*** Archives
 
 #+BEGIN_SRC emacs-lisp
   (setq package-archives '(("melpa" . "http://melpa.org/packages/")
                            ("gnu" . "http://elpa.gnu.org/packages/")))
 #+END_SRC
 
-** Package list
+*** Package list
 
    A list of packages that I want.
 
 #+BEGIN_SRC emacs-lisp
-  (setq package-list '(beacon company flymake-easy flymake-go
-          geiser go-errcheck go-rename go-mode golden-ratio golint
-          helm async hydra js2-mode latex-preview-pane main-line
-          org-beautify-theme magit leuven-theme cyberpunk-theme
-          sudo-ext with-editor zlc))
+  (setq package-list '(async beacon cyberpunk-theme flymake-go
+        geiser go-errcheck go-mode golden-ratio golint helm hydra
+        js2-mode latex-preview-pane leuven-theme magit
+        org-beautify-theme org-bullets sudo-ext with-editor zlc))
 #+END_SRC
 
-** Automatic installation
+*** Automatic installation
 
    Initialize packages and install the ones missing from the list.
 
 #+BEGIN_SRC emacs-lisp
   (package-initialize) ; activate all the packages (in particular autoloads)
 
-  ; fetch the list of packages available 
+  ; fetch the list of available packages 
   (unless package-archive-contents
     (package-refresh-contents))
 
@@ -37,6 +39,51 @@
   (dolist (package package-list)
     (unless (package-installed-p package)
       (package-install package)))
+#+END_SRC
+
+** Keybindings
+
+  Named keys have to be surrounded with angle brackets.
+
+#+BEGIN_SRC emacs-lisp
+  ;; magit
+  (global-set-key (kbd "C-x g") 'magit-status)
+
+  ;; helm
+  (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+  (global-set-key (kbd "M-x") 'helm-M-x)
+
+  (global-set-key (kbd "`") 'other-window)
+  (global-set-key (kbd "C-<f4>") 'kill-buffer)
+#+END_SRC
+
+** Variables
+
+#+BEGIN_SRC emacs-lisp
+  (blink-cursor-mode -1)
+  (column-number-mode t)
+  (setq echo-keystrokes 0.001)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+#+END_SRC
+
+** Beacon
+
+#+BEGIN_SRC emacs-lisp
+  (beacon-mode 1)
+  (setq beacon-blink-delay 0
+        beacon-color 0.1
+        beacon-size 80)
+#+END_SRC
+
+
+* Org
+
+** Org-bullets
+
+#+BEGIN_SRC emacs-lisp
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+END_SRC
 
 
@@ -74,7 +121,9 @@ go get github.com/nsf/gocode
 #+END_SRC
 
 
-* Magit http://magit.vc/
+* Magit
+
+  A git porcelain http://magit.vc/
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/site-lisp/magit/lisp")
@@ -84,7 +133,6 @@ go get github.com/nsf/gocode
   (info-initialize)
   (add-to-list 'Info-directory-list
 	       "~/.emacs.d/site-lisp/magit/Documentation/"))
-
 #+END_SRC
 
 
@@ -141,33 +189,3 @@ go get github.com/nsf/gocode
 
   (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
 #+END_SRC
-
-
-* Global keybindings
-
-  Named keys have to be surrounded with angle brackets.
-
-#+BEGIN_SRC emacs-lisp
-;; magit
-(global-set-key (kbd "C-x g") 'magit-status)
-
-;; helm
-(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-(global-set-key (kbd "M-x") 'helm-M-x)
-
-(global-set-key (kbd "`") 'other-window)
-(global-set-key (kbd "C-<f4>") 'kill-buffer)
-#+END_SRC
-
-
-
-
-
-
-
-
-
-
-
-
-
