@@ -55,10 +55,10 @@
 #+BEGIN_SRC sh :tangle no
 go get golang.org/x/tools/cmd/goimports
 #+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (setq gofmt-command "goimports")
 #+END_SRC
-
 
 ** Completion
 
@@ -91,24 +91,55 @@ go get github.com/nsf/gocode
 * Helm
 
 #+BEGIN_SRC emacs-lisp
-(require 'helm)
-(require 'helm-config)
+  (require 'helm)
+  (require 'helm-config)
+  (require 'golden-ratio)
+#+END_SRC
 
-; rebind tab to run persistent action
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-; make TAB works in terminal
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-; list actions using C-z
-(define-key helm-map (kbd "C-z")  'helm-select-action)
+** Keybindings
 
-(when (executable-find "curl")
-  (setq helm-google-suggest-use-curl-p t))
+   Switch functions of <tab> and C-z.
 
-(add-hook 'eshell-mode-hook
-          (lambda ()
-            (eshell-cmpl-initialize)
-            (define-key eshell-mode-map [remap pcomplete] 'helm-esh-pcomplete)))
+#+BEGIN_SRC emacs-lisp
+  (define-key helm-map (kbd "<tab>")
+    'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i")
+    'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-z")
+    'helm-select-action)
+#+END_SRC
 
+** Eshell integration
+
+#+BEGIN_SRC emacs-lisp
+  ;; Compatibility 24.2/24.3
+  (unless (fboundp 'eshell-pcomplete)
+    (defalias 'eshell-pcomplete 'pcomplete))
+  (unless (fboundp 'eshell-complete-lisp-symbol)
+    (defalias 'eshell-complete-lisp-symbol 'lisp-complete-symbol))
+
+  (add-hook 'eshell-mode-hook
+            #'(lambda ()
+                (setq eshell-pwd-convert-function
+                      (lambda (f)
+                        (if (file-equal-p (file-truename f) "/") "/" f)))
+                ;; Helm completion with pcomplete
+                (setq eshell-cmpl-ignore-case t)
+                (eshell-cmpl-initialize)
+                (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+                ;; Helm lisp completion
+                (define-key eshell-mode-map [remap eshell-complete-lisp-symbol] 'helm-lisp-completion-at-point)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t))
+
+  (defun pl/helm-alive-p ()
+    (if (boundp 'helm-alive-p)
+        (symbol-value 'helm-alive-p)))
+
+  (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
 #+END_SRC
 
 
@@ -126,7 +157,6 @@ go get github.com/nsf/gocode
 
 (global-set-key (kbd "`") 'other-window)
 (global-set-key (kbd "C-<f4>") 'kill-buffer)
-
 #+END_SRC
 
 
