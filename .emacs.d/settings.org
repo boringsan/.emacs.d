@@ -66,9 +66,11 @@ therefore that's the required Emacs version of this config.
 #+BEGIN_SRC emacs-lisp
   (blink-cursor-mode -1)
   (column-number-mode t)
-  (setq echo-keystrokes 0.001)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
+  (setq echo-keystrokes 0.001)
+  (setq ring-bell-function (lambda ()
+                             (play-sound-file "~/.emacs.d/bell.wav")))
 #+END_SRC
 
 ** Beacon
@@ -140,28 +142,35 @@ go get github.com/nsf/gocode
 #+END_SRC
 
 
-* Helm
+* Helm and Ido
 
 #+BEGIN_SRC emacs-lisp
   (require 'helm)
   (require 'helm-config)
   (require 'golden-ratio)
-#+END_SRC
 
+  (helm-mode)
+  (golden-ratio-mode)
+
+  (helm-autoresize-mode)
+
+  (setq helm-split-window-in-side-p t)
+#+END_SRC
+  
 ** Keybindings
 
    Switch functions of <tab> and C-z.
 
 #+BEGIN_SRC emacs-lisp
-  (define-key helm-map (kbd "<tab>")
-    'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-i")
-    'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-z")
-    'helm-select-action)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-z")   'helm-select-action)
 #+END_SRC
 
+
 ** Eshell integration
+
+   Helm is not the best tool for eshell completition (currently).
 
 #+BEGIN_SRC emacs-lisp
   ;; Compatibility 24.2/24.3
@@ -172,15 +181,16 @@ go get github.com/nsf/gocode
 
   (add-hook 'eshell-mode-hook
             #'(lambda ()
-                (setq eshell-pwd-convert-function
-                      (lambda (f)
-                        (if (file-equal-p (file-truename f) "/") "/" f)))
                 ;; Helm completion with pcomplete
                 (setq eshell-cmpl-ignore-case t)
                 (eshell-cmpl-initialize)
-                (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+                (define-key eshell-mode-map
+                  [remap eshell-pcomplete]
+                  'helm-esh-pcomplete)
                 ;; Helm lisp completion
-                (define-key eshell-mode-map [remap eshell-complete-lisp-symbol] 'helm-lisp-completion-at-point)))
+                (define-key eshell-mode-map
+                  [remap eshell-complete-lisp-symbol]
+                  'helm-lisp-completion-at-point)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -193,3 +203,6 @@ go get github.com/nsf/gocode
 
   (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
 #+END_SRC
+
+
+
