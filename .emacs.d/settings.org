@@ -1,8 +1,8 @@
 #+TITLE: Emacs settings
 #+AUTHOR: Erik Šabič
 
-Some settings apply to Emacs versions greater than 24 only, so
-therefore that's the required Emacs version of this config.
+Some settings apply to Emacs versions greater than 24, therefore
+that's the required Emacs version of this config.
 
 * General
 ** Package.el
@@ -17,26 +17,40 @@ therefore that's the required Emacs version of this config.
 
    A list of packages that I want.
 
-#+BEGIN_SRC emacs-lisp
-  (setq package-list '(async beacon cyberpunk-theme flymake-go
-        geiser go-errcheck go-mode golden-ratio golint helm hydra
-        js2-mode latex-preview-pane leuven-theme magit
-        org-beautify-theme org-bullets sudo-ext with-editor zlc))
-#+END_SRC
+#+NAME: package-list
+   - async
+   - beacon
+   - cyberpunk-theme
+   - flymake-go
+   - geiser
+   - go-errcheck
+   - go-mode
+   - golden-ratio
+   - golint
+   - helm
+   - hydra
+   - js2-mode
+   - latex-preview-pane
+   - leuven-theme
+   - magit
+   - org-bullets
+   - sudo-ext
+   - with-editor
+   - zlc
 
 *** Automatic installation
 
-   Initialize packages and install the ones missing from the list.
+	Call package-initialize, fetch the package repositories and
+	install any package -- defined in package-list -- that is missing.
 
-#+BEGIN_SRC emacs-lisp
-  (package-initialize) ; activate all the packages (in particular autoloads)
+#+BEGIN_SRC emacs-lisp :var list=package-list
+  (package-initialize)
 
-  ; fetch the list of available packages 
   (unless package-archive-contents
     (package-refresh-contents))
 
-  ; install the missing packages
-  (dolist (package package-list)
+  (dolist (package-name list)
+    (setq package (intern package-name))
     (unless (package-installed-p package)
       (package-install package)))
 #+END_SRC
@@ -69,8 +83,10 @@ therefore that's the required Emacs version of this config.
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (setq echo-keystrokes 0.001)
-  (setq ring-bell-function (lambda ()
-                             (play-sound-file "~/.emacs.d/bell.wav")))
+  (setq ring-bell-function
+        (lambda ()
+          (call-process "play" nil 0 nil
+                        "~/.emacs.d/bell.wav")))
 #+END_SRC
 
 ** Beacon
