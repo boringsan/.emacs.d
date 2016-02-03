@@ -5,6 +5,14 @@ Some settings apply to Emacs versions greater than 24, therefore
 that's the required Emacs version of this config.
 
 * General
+** Load this file in init.el
+
+#+BEGIN_SRC emacs-lisp :tangle init.el
+(require 'org)
+(org-babel-load-file
+ (expand-file-name "settings.org"
+                   user-emacs-directory))
+#+END_SRC
 ** Package.el
 *** Archives
 
