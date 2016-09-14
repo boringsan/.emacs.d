@@ -34,13 +34,11 @@ that's the required Emacs version of this config.
    - beacon
    - cyberpunk-theme
    - elm-mode
-   - flymake-go
    - geiser
    - go-errcheck
    - go-mode
    - golden-ratio
    - golint
-   - helm
    - hydra
    - js2-mode
    - latex-preview-pane
@@ -79,8 +77,6 @@ that's the required Emacs version of this config.
    global-set-key on the table.
 
 #+TBLNAME: keybindings
-   | C-h SPC | helm-all-mark-rings   |
-   | M-x     | helm-M-x              |
    | <f12>   | switch-to-prev-buffer |
    | S-<f12> | switch-to-next-buffer |
    | <f9>    | eshell                |
@@ -199,63 +195,10 @@ go get github.com/nsf/gocode
 #+END_SRC
 
 
-* Helm and Ido
+* Windows and minibuffer
 
 #+BEGIN_SRC emacs-lisp
-  (require 'helm)
-  (require 'helm-config)
   (require 'golden-ratio)
-
-  (helm-mode)
-  (helm-autoresize-mode)
-
-  (setq helm-split-window-in-side-p t)
-#+END_SRC
-  
-** Keybindings
-
-   Switch functions of <tab> and C-z.
-
-#+BEGIN_SRC emacs-lisp
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-z")   'helm-select-action)
-#+END_SRC
-
-** Eshell integration
-
-   Helm is not the best tool for eshell completition (currently).
-
-#+BEGIN_SRC emacs-lisp
-  ;; Compatibility 24.2/24.3
-  (unless (fboundp 'eshell-pcomplete)
-    (defalias 'eshell-pcomplete 'pcomplete))
-  (unless (fboundp 'eshell-complete-lisp-symbol)
-    (defalias 'eshell-complete-lisp-symbol 'lisp-complete-symbol))
-
-  (add-hook 'eshell-mode-hook
-            #'(lambda ()
-                ;; Helm completion with pcomplete
-                (setq eshell-cmpl-ignore-case t)
-                (eshell-cmpl-initialize)
-                (define-key eshell-mode-map
-                  [remap eshell-pcomplete]
-                  'helm-esh-pcomplete)
-                ;; Helm lisp completion
-                (define-key eshell-mode-map
-                  [remap eshell-complete-lisp-symbol]
-                  'helm-lisp-completion-at-point)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (when (executable-find "curl")
-    (setq helm-google-suggest-use-curl-p t))
-
-  (defun pl/helm-alive-p ()
-    (if (boundp 'helm-alive-p)
-        (symbol-value 'helm-alive-p)))
-
-  (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
 #+END_SRC
 
 
