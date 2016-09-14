@@ -213,6 +213,9 @@ go get github.com/nsf/gocode
 #+BEGIN_SRC emacs-lisp
   (ido-mode 1)
   (ido-vertical-mode 1)
+  (ido-everywhere 1)
+  (ido-ubiquitous-mode 1)
+  (ido-yes-or-no-mode 1)
 
   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
