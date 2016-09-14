@@ -40,6 +40,7 @@ that's the required Emacs version of this config.
    - golden-ratio
    - golint
    - hydra
+   - ido-vertical-mode
    - js2-mode
    - latex-preview-pane
    - leuven-theme
@@ -204,5 +205,14 @@ go get github.com/nsf/gocode
   (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 #+END_SRC
 
+** Ido
+
+#+BEGIN_SRC emacs-lisp
+
+  (require 'ido-vertical-mode)
+  (ido-mode 1)
+  (ido-vertical-mode 1)
+
+#+END_SRC
 
 
