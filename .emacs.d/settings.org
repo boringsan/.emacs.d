@@ -4,24 +4,28 @@
 Some settings apply to Emacs versions greater than 24, therefore
 that's the required Emacs version of this config.
 
-* General
-** Load this file in init.el
+
+* Init.el
+
+  Load this org file in init.el. Tangle with C-c C-v t.
 
 #+BEGIN_SRC emacs-lisp :tangle init.el
-(require 'org)
-(org-babel-load-file
- (expand-file-name "settings.org"
-                   user-emacs-directory))
+  (require 'org)
+  (org-babel-load-file
+   (expand-file-name "settings.org"
+                     user-emacs-directory))
 #+END_SRC
-** Package.el
-*** Archives
+
+
+* Package.el
+** Archives
 
 #+BEGIN_SRC emacs-lisp
   (setq package-archives '(("melpa" . "http://melpa.org/packages/")
                            ("gnu" . "http://elpa.gnu.org/packages/")))
 #+END_SRC
 
-*** Package list
+** Package list
 
    A list of packages that I want.
 
@@ -29,6 +33,7 @@ that's the required Emacs version of this config.
    - async
    - beacon
    - cyberpunk-theme
+   - elm-mode
    - flymake-go
    - geiser
    - go-errcheck
@@ -46,10 +51,10 @@ that's the required Emacs version of this config.
    - with-editor
    - zlc
 
-*** Automatic installation
+** Automatic installation
 
 	Call package-initialize, fetch the package repositories and
-	install any package -- defined in package-list -- that is missing.
+	install any package from the list that is missing.
 
 #+BEGIN_SRC emacs-lisp :var list=package-list
   (package-initialize)
@@ -63,47 +68,75 @@ that's the required Emacs version of this config.
       (package-install package)))
 #+END_SRC
 
+
+* General
+
+  All subsections here do something with data from tables.
+
 ** Keybindings
 
-  Named keys have to be surrounded with angle brackets.
+   Named keys have to be surrounded with angle brackets. Runs
+   global-set-key on the table.
 
 #+TBLNAME: keybindings
-  | key     | function            |
-  |---------+---------------------|
-  | C-h SPC | helm-all-mark-rings |
-  | M-x     | helm-M-x            |
-  | C-<f4>  | kill-buffer         |
-  | C-x g   | magit-status        |
-  | `       | other-window        |
+   | C-h SPC | helm-all-mark-rings   |
+   | M-x     | helm-M-x              |
+   | <f12>   | switch-to-prev-buffer |
+   | S-<f12> | switch-to-next-buffer |
+   | <f9>    | eshell                |
+   | C-<f4>  | kill-buffer           |
+   | C-x g   | magit-status          |
+   | `       | other-window          |
 
-#+BEGIN_SRC emacs-lisp :var data=keybindings[2:-1,] :results silent
+#+BEGIN_SRC emacs-lisp :var data=keybindings
   (mapc (lambda (row)
           (global-set-key (kbd (car row))
                           (intern (car (cdr row)))))
         data)
 #+END_SRC
 
+** Global minor modes
+
+#+TBLNAME: modes
+   | blink-cursor  | -1 |
+   | menu-bar      | -1 |
+   | tool-bar      | -1 |
+   | beacon        | t  |
+   | column-number | t  |
+   | golden-ratio  | t  |
+   | show-paren    | t  |
+
+#+BEGIN_SRC emacs-lisp :var data=modes
+  (mapc (lambda (row)
+          (funcall (intern (concat (car row) "-mode"))
+                   (car (cdr row))))
+        data)
+#+END_SRC
+
 ** Variables
 
+#+TBLNAME: vars
+   | echo-keystrokes       | 0.001 |
+   | beacon-size           |    80 |
+   | beacon-blink-delay    |     0 |
+   | tab-width             |     4 |
+   | show-paren-delay      | 0.001 |
+   | next-line-addnewlines |     t |
+   | doc-view-continuous   |     t |
+
+#+BEGIN_SRC emacs-lisp :var data=vars
+  (mapc (lambda (row)
+          (set (intern (car row)) (car (cdr row))))
+        data)
+#+END_SRC
+
+** Replace the ring-bell
+
 #+BEGIN_SRC emacs-lisp
-  (blink-cursor-mode -1)
-  (column-number-mode t)
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (setq echo-keystrokes 0.001)
   (setq ring-bell-function
         (lambda ()
           (call-process "play" nil 0 nil
                         "~/.emacs.d/bell.wav")))
-#+END_SRC
-
-** Beacon
-
-#+BEGIN_SRC emacs-lisp
-  (beacon-mode 1)
-  (setq beacon-blink-delay 0
-        beacon-color 0.1
-        beacon-size 80)
 #+END_SRC
 
 
@@ -156,13 +189,13 @@ go get github.com/nsf/gocode
   A git porcelain http://magit.vc/
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/site-lisp/magit/lisp")
-(require 'magit)
+  (add-to-list 'load-path "~/.emacs.d/site-lisp/magit/lisp")
+  (require 'magit)
 
-(with-eval-after-load 'info
-  (info-initialize)
-  (add-to-list 'Info-directory-list
-	       "~/.emacs.d/site-lisp/magit/Documentation/"))
+  (with-eval-after-load 'info
+    (info-initialize)
+    (add-to-list 'Info-directory-list
+             "~/.emacs.d/site-lisp/magit/Documentation/"))
 #+END_SRC
 
 
@@ -174,8 +207,6 @@ go get github.com/nsf/gocode
   (require 'golden-ratio)
 
   (helm-mode)
-  (golden-ratio-mode)
-
   (helm-autoresize-mode)
 
   (setq helm-split-window-in-side-p t)
@@ -190,7 +221,6 @@ go get github.com/nsf/gocode
   (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-z")   'helm-select-action)
 #+END_SRC
-
 
 ** Eshell integration
 
@@ -227,6 +257,5 @@ go get github.com/nsf/gocode
 
   (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
 #+END_SRC
-
 
 
