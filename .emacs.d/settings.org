@@ -46,6 +46,7 @@ that's the required Emacs version of this config.
    - leuven-theme
    - magit
    - org-bullets
+   - smex
    - sudo-ext
    - with-editor
    - zlc
@@ -78,12 +79,14 @@ that's the required Emacs version of this config.
    global-set-key on the table.
 
 #+TBLNAME: keybindings
-   | <f12>   | switch-to-prev-buffer |
-   | S-<f12> | switch-to-next-buffer |
-   | <f9>    | eshell                |
-   | C-<f4>  | kill-buffer           |
-   | C-x g   | magit-status          |
-   | `       | other-window          |
+   | M-x     | smex                     |
+   | M-X     | smex-major-mode-commands |
+   | <f12>   | switch-to-prev-buffer    |
+   | S-<f12> | switch-to-next-buffer    |
+   | <f9>    | eshell                   |
+   | C-<f4>  | kill-buffer              |
+   | C-x g   | magit-status             |
+   | `       | other-window             |
 
 #+BEGIN_SRC emacs-lisp :var data=keybindings
   (mapc (lambda (row)
@@ -208,11 +211,12 @@ go get github.com/nsf/gocode
 ** Ido
 
 #+BEGIN_SRC emacs-lisp
-
-  (require 'ido-vertical-mode)
   (ido-mode 1)
   (ido-vertical-mode 1)
 
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+
+  (smex-initialize)
 #+END_SRC
 
 
