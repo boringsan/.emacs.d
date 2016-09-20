@@ -1,8 +1,7 @@
 #+TITLE: Emacs settings
 #+AUTHOR: Erik Šabič
 
-Some settings apply to Emacs versions greater than 24, therefore
-that's the required Emacs version of this config.
+Works with Emacs versions greater than 24.
 
 
 * Init.el
@@ -17,7 +16,10 @@ that's the required Emacs version of this config.
 #+END_SRC
 
 
-* Package.el
+* Packages
+
+Automatically install packages using package.el
+
 ** Archives
 
 #+BEGIN_SRC emacs-lisp
@@ -25,14 +27,14 @@ that's the required Emacs version of this config.
                            ("gnu" . "http://elpa.gnu.org/packages/")))
 #+END_SRC
 
+
 ** Package list
 
    A list of packages that I want.
 
 #+NAME: package-list
    - async
-   - beacon
-   - cyberpunk-theme
+   - company-go
    - elm-mode
    - geiser
    - go-errcheck
@@ -49,7 +51,6 @@ that's the required Emacs version of this config.
    - smex
    - sudo-ext
    - with-editor
-   - zlc
 
 ** Automatic installation
 
@@ -69,7 +70,7 @@ that's the required Emacs version of this config.
 #+END_SRC
 
 
-* General
+* Global
 
   All subsections here do something with data from tables.
 
@@ -95,16 +96,16 @@ that's the required Emacs version of this config.
         data)
 #+END_SRC
 
-** Global minor modes
+** Minor modes
 
 #+TBLNAME: modes
-   | blink-cursor  | -1 |
-   | menu-bar      | -1 |
-   | tool-bar      | -1 |
-   | beacon        | t  |
-   | column-number | t  |
-   | golden-ratio  | t  |
-   | show-paren    | t  |
+   | blink-cursor   | -1 |
+   | menu-bar       | -1 |
+   | tool-bar       | -1 |
+   | column-number  | t  |
+   | golden-ratio   | t  |
+   | show-paren     | t  |
+   | global-company | t  |
 
 #+BEGIN_SRC emacs-lisp :var data=modes
   (mapc (lambda (row)
@@ -117,8 +118,6 @@ that's the required Emacs version of this config.
 
 #+TBLNAME: vars
    | echo-keystrokes       | 0.001 |
-   | beacon-size           |    80 |
-   | beacon-blink-delay    |     0 |
    | tab-width             |     4 |
    | show-paren-delay      | 0.001 |
    | next-line-addnewlines |     t |
@@ -156,6 +155,12 @@ that's the required Emacs version of this config.
 
 #+BEGIN_SRC emacs-lisp
 (add-hook 'before-save-hook 'gofmt-before-save)
+#+END_SRC
+
+** go-eldoc
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'go-mode-hook 'go-eldoc-setup)
 #+END_SRC
 
 ** Goimports
@@ -223,3 +228,13 @@ go get github.com/nsf/gocode
 #+END_SRC
 
 
+
+* Eshell
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'eshell-mode-hook
+            '(lambda ()
+              (define-key eshell-mode-map (kbd "TAB")
+                'company-complete)))
+
+#+END_SRC
