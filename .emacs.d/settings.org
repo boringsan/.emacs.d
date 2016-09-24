@@ -238,3 +238,16 @@ go get github.com/nsf/gocode
                 'company-complete)))
 
 #+END_SRC
+
+
+* Colorize compilation
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point))))
+  (add-hook 'compilation-filter-hook
+            'colorize-compilation-buffer)
+#+END_SRC
+
